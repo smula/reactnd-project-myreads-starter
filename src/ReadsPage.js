@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import BookShelf from './BookShelf'
-import books from './books'
 
 export default class ReadsPage extends Component {
   constructor() {
@@ -31,9 +30,11 @@ export default class ReadsPage extends Component {
     e.preventDefault();
     const bookValue = e.target.value;
     const bookId = e.target.name;
+
     this.setState((state) => {
       books: state.books.map((book) => {
         if (book.id === bookId) {
+          BooksAPI.update(book, bookValue);
           book.shelf = bookValue;
         }
         return book;
