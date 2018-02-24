@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import * as BooksAPI from './BooksAPI'
 import BookShelf from './BookShelf'
 import books from './books'
 
@@ -9,7 +10,7 @@ export default class ReadsPage extends Component {
     this.handleBookCategoryChange = this.handleBookCategoryChange.bind(this);
   }
   state = {
-    books: books,
+    books: [],
     categories: [
       { title: 'Currently Reading', value: 'currentlyReading' },
       { title: 'Want to Read', value: 'wantToRead' },
@@ -17,15 +18,23 @@ export default class ReadsPage extends Component {
     ]
   }
 
+  componentDidMount() {
+    BooksAPI.getAll().then((books) => {
+      console.log(books);
+      this.setState({
+        books,
+      })
+    });
+  }
+
   handleBookCategoryChange(e) {
     e.preventDefault();
     const bookValue = e.target.value;
-    const bookName = e.target.name;
-
+    const bookId = e.target.name;
     this.setState((state) => {
       books: state.books.map((book) => {
-        if (book.name === bookName) {
-          book.value = bookValue;
+        if (book.id === bookId) {
+          book.shelf = bookValue;
         }
         return book;
       })
@@ -33,6 +42,8 @@ export default class ReadsPage extends Component {
   }
 
   render() {
+    console.log('render');
+    console.log(this.state.books);
     return (
     <div className="list-books">
       <div className="list-books-title">
