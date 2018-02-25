@@ -24,7 +24,7 @@ const BookShelf = ({ books, category, changeBookCategory }) => (
 
 BookShelf.propTypes = {
   books: PropTypes.array.isRequired,
-  category: PropTypes.array.isRequired,
+  category: PropTypes.object.isRequired,
   changeBookCategory: PropTypes.func.isRequired,
 }
 export default BookShelf

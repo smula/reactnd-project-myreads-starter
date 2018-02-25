@@ -88,7 +88,6 @@ class SearchPage extends Component {
           return bookWithShelef.shelf = bookValue;
         });
 
-
         if (!bookExist) {
           myBook.shelf = bookValue;
           booksWithShelevs.push(myBook);
