@@ -32,7 +32,7 @@ const Book = ({ book, changeBookCategory }) => (
       }
     </div>
   </li>
-)
+);
 
 Book.propTypes = {
   book: PropTypes.object.isRequired,

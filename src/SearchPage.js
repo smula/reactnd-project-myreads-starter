@@ -30,7 +30,7 @@ class SearchPage extends Component {
     this.search(query);
     this.setState({
       query,
-    })
+    });
   }
 
   getBooksWithShelevs(books) {
@@ -40,7 +40,7 @@ class SearchPage extends Component {
           book.shelf = bookInShelf.shelf;
         }
         return bookInShelf;
-      })
+      });
     });
   }
 
@@ -56,7 +56,7 @@ class SearchPage extends Component {
             if (this.state.query !== '') {
               this.setState({
                 books: results,
-              })
+              });
             }
           }
         })
@@ -66,7 +66,7 @@ class SearchPage extends Component {
     } else {
       this.setState({
         books: [],
-      })
+      });
     }
   }
 
@@ -97,7 +97,7 @@ class SearchPage extends Component {
         }
         this.setState({
           booksWithShelevs,
-        })
+        });
       });
 
         BooksAPI.update(book, bookValue).then(() => {
@@ -106,7 +106,7 @@ class SearchPage extends Component {
       }
       return book;
     });
-  }
+  };
 
   render() {
     const { query, books } = this.state;
@@ -147,6 +147,6 @@ class SearchPage extends Component {
       </div>
     )
   }
-}
+};
 
 export default SearchPage
