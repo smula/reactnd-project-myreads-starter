@@ -19,7 +19,6 @@ export default class ReadsPage extends Component {
 
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
-      console.log(books);
       this.setState({
         books,
       })
@@ -43,8 +42,6 @@ export default class ReadsPage extends Component {
   }
 
   render() {
-    console.log('render');
-    console.log(this.state.books);
     return (
     <div className="list-books">
       <div className="list-books-title">

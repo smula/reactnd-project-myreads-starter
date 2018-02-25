@@ -4,9 +4,26 @@ import * as BooksAPI from './BooksAPI'
 import Book from './Book'
 
 class SearchPage extends Component {
+  constructor() {
+    super();
+    this.addBook = this.addBook.bind(this);
+  }
   state = {
     query: '',
-    books: []
+    books: [],
+    booksWithShelevs: [],
+  }
+
+  componentDidMount() {
+    this.updateBooksInList();
+  }
+
+  updateBooksInList() {
+    BooksAPI.getAll().then((booksWithShelevs) => {
+      this.setState({
+        booksWithShelevs,
+      });
+    })
   }
 
   updateQuery(query) {
@@ -16,14 +33,26 @@ class SearchPage extends Component {
     })
   }
 
+  getBooksWithShelevs(books) {
+    books.map((book) => {
+      return this.state.booksWithShelevs.map((bookInShelf) => {
+        if (bookInShelf.id === book.id) {
+          book.shelf = bookInShelf.shelf;
+        }
+        return bookInShelf;
+      })
+    });
+  }
+
   search(query) {
     if (query !== '') {
       BooksAPI.search(query)
         .then((results) => {
           if (!results || results.error) {
-            this.setState({ books: [] })
+            this.setState({
+              books: [],
+            });
           } else if(Array.isArray(results)) {
-            console.log(results);
             if (this.state.query !== '') {
               this.setState({
                 books: results,
@@ -32,9 +61,8 @@ class SearchPage extends Component {
           }
         })
         .catch((error) => {
-          console.log('something went wrong with the search');
-        })
-      ;
+          console.log(error, 'something went wrong with the search');
+        });
     } else {
       this.setState({
         books: [],
@@ -45,13 +73,44 @@ class SearchPage extends Component {
   addBook(e) {
     e.preventDefault();
     const bookValue = e.target.value;
-    const bookName = e.target.name;
+    const bookId = e.target.name;
+    this.state.books.map((book, index) => {
+      if (book.id === bookId) {
 
-    console.log(bookName);
+      BooksAPI.get(book.id).then((myBook) => {
+        let booksWithShelevs = this.state.booksWithShelevs;
+        let bookExist = false;
+        booksWithShelevs = booksWithShelevs.filter((bookWithShelef) => {
+          if (bookWithShelef.id !== myBook.id) {
+            return bookWithShelef;
+          }
+          bookExist = true;
+          return bookWithShelef.shelf = bookValue;
+        });
+
+
+        if (!bookExist) {
+          myBook.shelf = bookValue;
+          booksWithShelevs.push(myBook);
+        } else {
+          myBook.shelf = bookValue;
+        }
+        this.setState({
+          booksWithShelevs,
+        })
+      });
+
+        BooksAPI.update(book, bookValue).then(() => {
+          this.search(this.state.query);
+        });
+      }
+      return book;
+    });
   }
 
   render() {
     const { query, books } = this.state;
+    this.getBooksWithShelevs(books);
 
     return (
       <div className="search-books">
@@ -75,7 +134,7 @@ class SearchPage extends Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {
-              this.state.books.map((book, index) => (
+              books.map((book, index) => (
                 <Book
                   key={index}
                   book={book}
