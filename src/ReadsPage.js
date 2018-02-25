@@ -30,15 +30,15 @@ export default class ReadsPage extends Component {
     const bookValue = e.target.value;
     const bookId = e.target.name;
 
-    this.setState((state) => {
+    this.setState((state) => ({
       books: state.books.map((book) => {
         if (book.id === bookId) {
           BooksAPI.update(book, bookValue);
           book.shelf = bookValue;
         }
         return book;
-      });
-    });
+      }),
+    }));
   }
 
   render() {
