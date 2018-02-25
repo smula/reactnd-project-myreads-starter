@@ -6,7 +6,7 @@ import Book from './Book'
 class SearchPage extends Component {
   constructor() {
     super();
-    this.addBook = this.addBook.bind(this);
+    this.changeList = this.changeList.bind(this);
   }
   state = {
     query: '',
@@ -47,15 +47,15 @@ class SearchPage extends Component {
   search(query) {
     if (query !== '') {
       BooksAPI.search(query)
-        .then((results) => {
-          if (!results || results.error) {
+        .then((books) => {
+          if (!books || books.error) {
             this.setState({
               books: [],
             });
-          } else if(Array.isArray(results)) {
+          } else if(Array.isArray(books)) {
             if (this.state.query !== '') {
               this.setState({
-                books: results,
+                books,
               });
             }
           }
@@ -70,7 +70,7 @@ class SearchPage extends Component {
     }
   }
 
-  addBook(e) {
+  changeList(e) {
     e.preventDefault();
     const bookValue = e.target.value;
     const bookId = e.target.name;
@@ -137,7 +137,7 @@ class SearchPage extends Component {
                 <Book
                   key={index}
                   book={book}
-                  changeBookCategory={this.addBook}
+                  changeBookCategory={this.changeList}
                 />
               ))
             }
